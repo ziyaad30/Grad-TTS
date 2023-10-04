@@ -2,7 +2,7 @@ Cython==0.29.35
 numba==0.57.1
 numpy==1.23.5
 matplotlib
-einops==0.3.0
+einops==0.6.1
 inflect
 Unidecode
 librosa==0.8.0
