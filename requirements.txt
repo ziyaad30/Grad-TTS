@@ -1,6 +1,6 @@
 Cython==0.29.35
 numba==0.57.1
-numpy==1.24.3
+numpy==1.21.6
 matplotlib
 einops==0.3.0
 inflect
