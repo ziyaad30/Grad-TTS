@@ -10,9 +10,9 @@ from model.utils import fix_len_compatibility
 
 
 # data parameters
-train_filelist_path = 'dataset/train.txt'
-valid_filelist_path = 'dataset/validate.txt'
-test_filelist_path = 'dataset/test.txt'
+train_filelist_path = './dataset/train.txt'
+valid_filelist_path = './dataset/validate.txt'
+test_filelist_path = './dataset/test.txt'
 add_blank = True
 n_feats = 80
 n_spks = 1  # 247 for Libri-TTS filelist and 1 for LJSpeech
@@ -42,7 +42,7 @@ beta_max = 20.0
 pe_scale = 1000  # 1 for `grad-tts-old.pt` checkpoint
 
 # training parameters
-log_dir = 'logs/new_exp'
+log_dir = '/content/drive/MyDrive/GradTTS/logs/new_exp'
 test_size = 4
 n_epochs = 20000
 batch_size = 16
