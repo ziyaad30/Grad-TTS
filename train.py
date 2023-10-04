@@ -25,7 +25,6 @@ from text.symbols import symbols
 
 train_filelist_path = params.train_filelist_path
 valid_filelist_path = params.valid_filelist_path
-cmudict_path = params.cmudict_path
 add_blank = params.add_blank
 
 log_dir = params.log_dir
