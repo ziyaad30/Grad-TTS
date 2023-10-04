@@ -1,8 +1,6 @@
 import torch
 import torch.utils.data
-import numpy as np
 from librosa.util import normalize
-from scipy.io.wavfile import read
 from librosa.filters import mel as librosa_mel_fn
 
 
