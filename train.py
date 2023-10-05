@@ -163,7 +163,7 @@ def train(args):
 
 def evaluate(model, test_batch, iteration, logger):
     with torch.no_grad():
-        for i, item in enumerate(tqdm(test_batch, desc="Evaluation", position=0, leave=False)):
+        for i, item in enumerate(test_batch):
             x = item['x'].to(torch.long).unsqueeze(0).cuda()
             x_lengths = torch.LongTensor([x.shape[-1]]).cuda()
             y_enc, y_dec, attn = model(x, x_lengths, n_timesteps=50)
