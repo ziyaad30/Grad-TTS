@@ -1,6 +1,11 @@
-_punctuation = ';:,.!?¡-—"«» '
-_letters = 'abcdefghijklmnopqrstuvwxyz'
+_pad = "_"
+_punctuation = '();:,.!?¡¿-…"«»“” '
+_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 _letters_ipa = "ɑɐɒæɓʙβɔɕçɗɖðʤəɘɚɛɜɝɞɟʄɡɠɢʛɦɧħɥʜɨɪʝɭɬɫɮʟɱɯɰŋɳɲɴøɵɸθœɶʘɹɺɾɻʀʁɽʂʃʈʧʉʊʋⱱʌɣɤʍχʎʏʑʐʒʔʡʕʢǀǁǂǃˈˌːˑʼʴʰʱʲʷˠˤ˞↓↑→↗↘'̩'ᵻ"
 
+
 # Export all symbols:
-symbols = list(_letters) + list(_letters_ipa) + list(_punctuation)
+symbols = [_pad] + list(_punctuation) + list(_letters) + list(_letters_ipa)
+
+# Special symbol ids
+SPACE_ID = symbols.index(" ")
