@@ -12,7 +12,7 @@ from torch.utils.tensorboard import SummaryWriter
 import params
 from model import GradTTS
 from data import TextMelDataset, TextMelBatchCollate
-from utils import plot_tensor, save_plot, oldest_checkpoint_path, load_ckpt, load_checkpoint
+from utils import plot_tensor, save_plot, oldest_checkpoint_path, load_ckpt
 from text.symbols import symbols
 
 
