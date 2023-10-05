@@ -41,8 +41,8 @@ beta_max = 20.0
 pe_scale = 1000  # 1 for `grad-tts-old.pt` checkpoint
 
 # training parameters
-log_dir = '/content/drive/MyDrive/GradTTS'
-ckpt_dir = './checkpoints'
+log_dir = './logs'
+ckpt_dir = '/content/drive/MyDrive/GradTTS'
 test_size = 4
 n_epochs = 20000
 batch_size = 16
