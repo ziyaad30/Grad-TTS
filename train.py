@@ -102,7 +102,7 @@ def train(args):
         dur_losses = []
         prior_losses = []
         diff_losses = []
-        for batch_idx, batch in enumerate(pbar(loader, desc="Epoch {}".format(epoch), position=1, leave=False)):
+        for batch_idx, batch in enumerate(pbar(loader, desc="Epoch {}".format(epoch), position=0, leave=False)):
             model.zero_grad()
             x, x_lengths = batch['x'].cuda(), batch['x_lengths'].cuda()
             y, y_lengths = batch['y'].cuda(), batch['y_lengths'].cuda()
