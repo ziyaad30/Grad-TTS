@@ -13,8 +13,6 @@ import numpy as np
 import torch
 import logging
 
-
-
 MATPLOTLIB_FLAG = False
 logging.basicConfig(stream=sys.stdout, level=logging.WARNING)
 logger = logging
@@ -40,12 +38,21 @@ def latest_checkpoint_path(dir_path, regex="G_[0-9]*.pt"):
     return x
 
 
-def load_ckpt(logdir, model):
+def load_ckpt(logdir, model, optimizer, scheduler):
     model_path = latest_checkpoint_path(logdir)
     checkpoint_dict = torch.load(model_path, map_location="cpu")
     model.load_state_dict(checkpoint_dict["state_dict"])
     iteration = checkpoint_dict["iteration"]
-    return model, iteration
+    optimizer.load_state_dict(checkpoint_dict["optimizer"])
+    scheduler.load_state_dict(checkpoint_dict["optimizer"])
+    return model, iteration, optimizer, scheduler
+
+
+def load_checkpoint(logdir, model):
+    model_path = latest_checkpoint_path(logdir)
+    model_dict = torch.load(model_path, map_location=lambda loc, storage: loc)
+    model.load_state_dict(model_dict, strict=False)
+    return model, 0
 
 
 def extract_digits(f):
@@ -78,7 +85,7 @@ def plot_tensor(tensor):
         mpl_logger = logging.getLogger("matplotlib")
         mpl_logger.setLevel(logging.WARNING)
     import matplotlib.pylab as plt
-    
+
     plt.style.use('default')
     fig, ax = plt.subplots(figsize=(12, 3))
     im = ax.imshow(tensor, aspect="auto", origin="lower", interpolation='none')
@@ -100,7 +107,7 @@ def save_plot(tensor, savepath):
         mpl_logger = logging.getLogger("matplotlib")
         mpl_logger.setLevel(logging.WARNING)
     import matplotlib.pylab as plt
-    
+
     plt.style.use('default')
     fig, ax = plt.subplots(figsize=(12, 3))
     im = ax.imshow(tensor, aspect="auto", origin="lower", interpolation='none')
