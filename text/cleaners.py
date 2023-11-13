@@ -2,11 +2,8 @@ import re
 import os
 from unidecode import unidecode
 from .numbers import normalize_numbers
-from dp.phonemizer import Phonemizer
 
 
-# Load phonemizer model
-phonemizer = Phonemizer.from_checkpoint('en_us_cmudict_ipa_forward.pt')
 
 # Regular expression matching whitespace:
 _whitespace_re = re.compile(r"\s+")
@@ -60,33 +57,43 @@ def convert_to_ascii(text):
     return unidecode(text)
 
 
-def do_ipa(text):
-    text = text.split()
-    new_text = []
-    for t in text:
-        if t.startswith('*'):
-            t = t.replace("*", "")
-            new_text.append(t)
-        else:    
-            t = phoneme_text(t)
-            new_text.append(t)
-    
-    return ' '.join(new_text)
+def check_stops(text):
+	for test in text.split(" "):
+		ellipses = re.search(r'(\w+)\.{1,}', test)
+		if ellipses:
+			word = ellipses.group(0)
+			elip = word[0:-1]
+			text = text.replace(word, elip + " .")
+	return text
 
 
-def phoneme_text(text, lang='en_us'):
-    text = phonemizer(text, lang)
-    return text.strip()
+def check_ellipse(text):
+	for test in text.split(" "):
+		ellipses = re.search(r'(\w+)\.{3,}', test)
+		if ellipses:
+			word = ellipses.group(0)
+			elip = word[0:-3]
+			text = text.replace(word, elip + " ...")
+	return text
 
 
 def english_cleaners(text):
-    '''Pipeline for English text, including number and abbreviation expansion.'''
-    text = text.strip()
-    text = convert_to_ascii(text)
-    text = lowercase(text)
-    text = expand_numbers(text)
-    text = expand_abbreviations(text)
-    text = collapse_whitespace(text)
-    text = phoneme_text(text)
-    text = collapse_whitespace(text)
-    return text
+	'''Pipeline for English text, including number and abbreviation expansion.'''
+	text = text.strip()
+	text = convert_to_ascii(text)
+	text = lowercase(text)
+	text = expand_numbers(text)
+	text = expand_abbreviations(text)
+	text = collapse_whitespace(text)
+	text = text.replace('(', '')
+	text = text.replace(')', '')
+	text = text.replace(':', ' : ')
+	text = text.replace(';', ' ;')
+	text = text.replace('"', '')
+	text = text.replace('!', ' !')
+	text = text.replace('?', ' ?')
+	text = text.replace(',', ' ,')
+	text = text.replace('-', ' ')
+	text = check_ellipse(text)
+	text = check_stops(text)
+	return text
