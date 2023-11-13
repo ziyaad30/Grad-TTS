@@ -246,6 +246,7 @@ class Trainer:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-	parser.add_argument("-s", "--save_path", type=str, default = './checkpoints', help="model save path")
+    parser.add_argument("-s", "--save_path", type=str, default = './checkpoints', help="model save path")
+    args = parser.parse_args()
     train = Trainer(args)
     train.train()
