@@ -1,4 +1,5 @@
 import os
+import argparse
 
 import numpy as np
 import torch
@@ -14,7 +15,7 @@ from utils import load_checkpoint, load_ckpt, plot_tensor, oldest_checkpoint_pat
 
 
 class Trainer:
-    def __init__(self):
+    def __init__(self, args):
         self.scheduler = None
         self.optimizer = None
         self.model = None
@@ -42,7 +43,7 @@ class Trainer:
         self.eps = 1e-6
         self.n_epochs = 1000
         self.seed = 1234
-        self.ckpt_dir = './logs'
+        self.ckpt_dir = args.save_path
         self.milestones = [100000, 150000, 200000]
         self.test_size = 4
 
@@ -224,7 +225,7 @@ class Trainer:
 
                 print(f'Eval step: { i +1} / {len(self.test_batch)}')
 
-    def save_checkpoint(self, ):
+    def save_checkpoint(self):
         torch.save(
             {
                 "iteration": self.iteration,
@@ -244,5 +245,7 @@ class Trainer:
 
 
 if __name__ == "__main__":
-    train = Trainer()
+    parser = argparse.ArgumentParser()
+	parser.add_argument("-s", "--save_path", type=str, default = './checkpoints', help="model save path")
+    train = Trainer(args)
     train.train()
