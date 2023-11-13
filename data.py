@@ -16,12 +16,11 @@ from text import text_to_sequence
 from text.symbols import symbols
 from utils import parse_filelist, intersperse
 from model.utils import fix_len_compatibility
-from params import seed as random_seed
 from meldataset import mel_spectrogram
 
 
 class TextMelDataset(torch.utils.data.Dataset):
-    def __init__(self, filelist_path, add_blank=True,
+    def __init__(self, filelist_path, add_blank=True, random_seed=1234,
                  n_fft=1024, n_mels=80, sample_rate=22050,
                  hop_length=256, win_length=1024, f_min=0., f_max=8000):
         self.filepaths_and_text = parse_filelist(filelist_path)
@@ -38,9 +37,9 @@ class TextMelDataset(torch.utils.data.Dataset):
 
     def get_pair(self, filepath_and_text):
         filepath, text = filepath_and_text[0], filepath_and_text[1]
-        text = self.get_text(text, add_blank=self.add_blank)
+        text = self.get_text(text)
         mel = self.get_mel(filepath)
-        return (text, mel)
+        return text, mel
 
     def get_mel(self, filepath):
         audio, sr = ta.load(filepath)
@@ -49,7 +48,7 @@ class TextMelDataset(torch.utils.data.Dataset):
                               self.win_length, self.f_min, self.f_max, center=False).squeeze()
         return mel
 
-    def get_text(self, text, add_blank=True):
+    def get_text(self, text):
         text_norm = text_to_sequence(text)
         if self.add_blank:
             text_norm = intersperse(text_norm, len(symbols))  # add a blank token, whose id number is len(symbols)
@@ -97,11 +96,12 @@ class TextMelBatchCollate(object):
 
 
 class TextMelSpeakerDataset(torch.utils.data.Dataset):
-    def __init__(self, filelist_path, add_blank=True,
+    def __init__(self, filelist_path, tuned_spk, add_blank=True, random_seed=1234,
                  n_fft=1024, n_mels=80, sample_rate=22050,
                  hop_length=256, win_length=1024, f_min=0., f_max=8000):
         super().__init__()
         self.filelist = parse_filelist(filelist_path, split_char='|')
+        self.tuned_spk = tuned_spk
         self.n_fft = n_fft
         self.n_mels = n_mels
         self.sample_rate = sample_rate
@@ -114,11 +114,11 @@ class TextMelSpeakerDataset(torch.utils.data.Dataset):
         random.shuffle(self.filelist)
 
     def get_triplet(self, line):
-        filepath, text, speaker = line[0], line[1], line[2]
-        text = self.get_text(text, add_blank=self.add_blank)
+        filepath, text, speaker = line[0], line[1], self.tuned_spk
+        text = self.get_text(text)
         mel = self.get_mel(filepath)
         speaker = self.get_speaker(speaker)
-        return (text, mel, speaker)
+        return text, mel, speaker
 
     def get_mel(self, filepath):
         audio, sr = ta.load(filepath)
@@ -127,7 +127,7 @@ class TextMelSpeakerDataset(torch.utils.data.Dataset):
                               self.win_length, self.f_min, self.f_max, center=False).squeeze()
         return mel
 
-    def get_text(self, text, add_blank=True):
+    def get_text(self, text):
         text_norm = text_to_sequence(text)
         if self.add_blank:
             text_norm = intersperse(text_norm, len(symbols))  # add a blank token, whose id number is len(symbols)
@@ -139,7 +139,7 @@ class TextMelSpeakerDataset(torch.utils.data.Dataset):
         return speaker
 
     def __getitem__(self, index):
-        text, mel, speaker = self.get_triplet(self.filelist[index])
+        text, mel, speaker = self.get_triplet(self.filelist[self.tuned_spk])
         item = {'y': mel, 'x': text, 'spk': speaker}
         return item
 
