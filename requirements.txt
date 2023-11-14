@@ -7,3 +7,4 @@ inflect
 Unidecode
 librosa==0.8.0
 scipy==1.10.1
+gdown
