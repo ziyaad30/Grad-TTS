@@ -33,7 +33,7 @@ class Trainer:
         self.train_filelist_path = './dataset/train.txt'
         self.valid_filelist_path = './dataset/valid.txt'
 
-        self.eval_interval = 500
+        self.eval_interval = args.interval
         self.log_interval = 10
 
         self.batch_size = 16
@@ -41,7 +41,7 @@ class Trainer:
         self.weight_decay = 1e-6
         self.betas = (0.9, 0.999)
         self.eps = 1e-6
-        self.n_epochs = 1000
+        self.n_epochs = args.epochs
         self.seed = 1234
         self.ckpt_dir = args.save_path
         self.milestones = [100000, 150000, 200000]
@@ -247,6 +247,8 @@ class Trainer:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--save_path", type=str, default = './checkpoints', help="model save path")
+    parser.add_argument("-e", "--epochs", type=int, default = 2000, help="number of training epochs")
+    parser.add_argument("-i", "--interval", type=int, default = 1000, help="each number of steps to save model")
     parser.add_argument('-o', '--load_old', action = 'store_true', help='load original grad-tts.pt')
     parser.add_argument('-p', '--pretrained', action = 'store_true', help='whether to use model as pretrained model')
     args = parser.parse_args()
