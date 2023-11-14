@@ -23,9 +23,9 @@ class Trainer:
         self.test_batch = None
         self.epoch = 0
         self.isRunning = True
-        self.load_original = True
+        self.load_original = args.load_old
         self.resume = True
-        self.pretrained = False
+        self.pretrained = args.pretrained
 
         self.out_size = fix_len_compatibility(2 * 22050 // 256)
         self.scalar_interval = 100
@@ -247,6 +247,8 @@ class Trainer:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--save_path", type=str, default = './checkpoints', help="model save path")
+    parser.add_argument('-o', '--load_old', action = 'store_true', help='load original grad-tts.pt')
+    parser.add_argument('-p', '--pretrained', action = 'store_true', help='whether to use model as pretrained model')
     args = parser.parse_args()
     train = Trainer(args)
     train.train()
