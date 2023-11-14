@@ -85,7 +85,9 @@ class Trainer:
                              params.filter_channels_dp, params.n_heads, params.n_enc_layers,
                              params.enc_kernel, params.enc_dropout, params.window_size,
                              params.n_feats, params.dec_dim, params.beta_min, params.beta_max, params.pe_scale).cuda()
-
+        
+        print(f'Training batch size: {self.batch_size}')
+        
         print('Initializing optimizer and scheduler...')
         # optimizer = torch.optim.Adam(params=self.model.parameters(), lr=params.learning_rate)
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate, betas=self.betas,
