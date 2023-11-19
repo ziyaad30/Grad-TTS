@@ -96,7 +96,7 @@ class Trainer:
 
         if self.load_original:
             print('Loading old original Grad TTS model...')
-            self.model, iteration = load_checkpoint("pretrained_models", self.model)
+            self.model, iteration = load_ckpt("pretrained_models", self.model, self.optimizer, self.scheduler)
             self.iteration = 0
         else:
             if self.pretrained:
