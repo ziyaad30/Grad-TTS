@@ -24,7 +24,7 @@ class Trainer:
         self.epoch = 0
         self.isRunning = True
         self.load_original = args.load_old
-        self.resume = True
+        self.resume = args.resume
         self.pretrained = args.pretrained
 
         self.out_size = fix_len_compatibility(2 * 22050 // 256)
@@ -254,6 +254,7 @@ if __name__ == "__main__":
     parser.add_argument("-b", "--batch", type=int, default = 16, help="training batch size")
     parser.add_argument('-o', '--load_old', action = 'store_true', help='load original grad-tts.pt')
     parser.add_argument('-p', '--pretrained', action = 'store_true', help='whether to use model as pretrained model')
+    parser.add_argument('-r', '--resume', action = 'store_true', help='resume training')
     args = parser.parse_args()
     train = Trainer(args)
     train.train()
