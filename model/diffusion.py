@@ -9,6 +9,7 @@
 import math
 import torch
 from einops import rearrange
+from tqdm import tqdm
 
 from model.base import BaseModule
 
@@ -255,7 +256,7 @@ class Diffusion(BaseModule):
     def reverse_diffusion(self, z, mask, mu, n_timesteps, stoc=False, spk=None):
         h = 1.0 / n_timesteps
         xt = z * mask
-        for i in range(n_timesteps):
+        for i in tqdm(range(n_timesteps)):
             t = (1.0 - (i + 0.5)*h) * torch.ones(z.shape[0], dtype=z.dtype, 
                                                  device=z.device)
             time = t.unsqueeze(-1).unsqueeze(-1)
